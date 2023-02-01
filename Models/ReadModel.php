@@ -1,13 +1,8 @@
 <?php
 require_once '../Configuration/ConnectLi.php';
-include_once '../Controllers/ConsultaController.php';
+include_once '../Controllers/ReadController.php';
 
-// namespace Configuration;
-// namespace Controllers;
-
-// use Connect;
-
-class ConsultaModel extends ConnectLi{
+class ReadModel extends ConnectLi{
     private $table;
     private $num;
     
@@ -16,9 +11,9 @@ class ConsultaModel extends ConnectLi{
         parent::__construct();
         $this->table = 'books';
     }
-    function getBusca(){
+    function read(){
         $num = $this->getNum();
-        $sqlSelect = $this->conectaLib->query("SELECT * FROM $this->table WHERE id = '{$num}'");
+        $sqlSelect = $this->conectLib->query("SELECT * FROM $this->table WHERE id = '{$num}'");
         $result = $sqlSelect->fetchAll();
         return $result;
 

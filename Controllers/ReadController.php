@@ -1,22 +1,16 @@
 <?php
-require_once '../Models/ConsultaModel.php';
+require_once '../Models/ReadModel.php';
 
-// namespace Models;
-// namespace Controllers;
-
-// use Models;
-
-
-class ConsultaController extends ConsultaModel{
+class ReadController extends ReadModel{
     private $model;
     private $num;
 
     public function __construct()
     {
-        $this->model = new ConsultaModel();
+        $this->model = new ReadModel();
     }
     function getAllBusca(){
-        $result = $this->model->getBusca();
+        $result = $this->model->read();
         return $result;
     
     }

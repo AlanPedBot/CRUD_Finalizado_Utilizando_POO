@@ -1,35 +1,36 @@
 <?php
 require_once '../Configuration/ConnectLi.php';
-include_once '../Controllers/DeleteController.php';
+include_once '../Controllers/UpdateController.php';
 
-// namespace Configuration;
-// namespace Controllers;
 
-// use Connect;
 
-class DeleteModel extends ConnectLi{
+class UpdateModel extends ConnectLi{
     private $table;
+    private $table2;
+    private $name;
+    private $session;
     private $id;
     public $limited_result = 10;
    
+    
     function __construct()
     {
         parent::__construct();
         $this->table = 'books';
+        $this->table2 = 'sessions';
     }
-    function delete(){
+    
+    function edit(){
+        $n = $this->getName();
+        $s = $this->getSession();
         $i = $this->getId();
-        $sqlDelete = $this->conectLib->query("DELETE FROM $this->table WHERE id = '{$i}'");
-        $resultDelete = $sqlDelete;
-        return $resultDelete;
+        $sqlUpdate = $this->conectLib->query("UPDATE $this->table SET name = '{$n}', session_id = '{$s}' WHERE id = '{$i}'");
+        $result = $sqlUpdate;
+        return $result;
     }
-    function consult(){
-        $i = $this->getId();
-        $sqlConsul = $this->conectLib->query("SELECT * FROM $this->table WHERE id = '{$i}'");
-        $resultC = $sqlConsul->fetchAll();
-        return $resultC;
-    }
-    function pagination(){
+   
+     // Função da paginação
+     function pagination(){
         $current_page = filter_input(INPUT_GET, "page", FILTER_SANITIZE_NUMBER_INT);
         $page = (!empty($current_page)) ? $current_page : 1;
        
@@ -55,12 +56,25 @@ class DeleteModel extends ConnectLi{
             return $qnt_page;
             // Maximo de itens por pagina
     }
-    // Getters e Setters 
+    // Getters e Setters
+    function getName(){
+        return $this->name;
+    }
+    function getSession(){
+        return $this->session;
+    }
     function getId(){
         return $this->id;
+    }
+    function setName($name){
+        $this->name = $name;
+    }
+    function setSession($session){
+        $this->session = $session;
     }
     function setId($id){
         $this->id = $id;
     }
 }
+
 ?>

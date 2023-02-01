@@ -29,7 +29,7 @@ require_once '../Configuration/ConnectLog.php';
             <input type="submit" value="ACESSAR" name="entrar">
             <div>
                 <div>
-                    <a href="cadastrar">Ainda não está
+                    <a href="register">Ainda não está
                         cadastrado?<strong> Cadastre-se!</strong></a>
                 </div>
             </div>

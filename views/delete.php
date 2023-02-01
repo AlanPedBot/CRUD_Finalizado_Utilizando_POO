@@ -39,10 +39,10 @@ require_once '../Configuration/ConnectLi.php';
     $id = $_POST['id'];
     $controller = new DeleteController();
     $controller->setIdC($id);
-    $d = $controller->deleteC();
+    $de = $controller->deleteC();
 
     if(isset($_POST["deleta"])){
-    if($d->rowCount() == 1){
+    if($de->rowCount() == 1){
         $_SESSION['msgd'] =  "<p style =' width: 350px;
         font-size: 20px;
         margin: 10px auto;
@@ -101,26 +101,6 @@ require_once '../Configuration/ConnectLi.php';
             </div>
         </div>
     </form>
-    <div>
-        <div class="position-relative" style="margin-top: 20px;">
-            <h3 style="font-weight:bold;">Você deve escolher um ID de sessão que exista no banco de dados</h3>
-            <h5>SEGUE AS 10 SESSÕES EXISTENTES NO BANCO DE DADOS:</h5>
-            <div class="list-group" style="margin-top: 20px; align-items: center;">
-                <ol class="list-group list-group-numbered" style="height:400px; width:400px;">
-                    <li class="list-group-item">Drama</li>
-                    <li class="list-group-item">Ficção Cientifica</li>
-                    <li class="list-group-item">Romance</li>
-                    <li class="list-group-item">Conto</li>
-                    <li class="list-group-item">Fantasia</li>
-                    <li class="list-group-item">Terror</li>
-                    <li class="list-group-item">Chick Lit</li>
-                    <li class="list-group-item">Distopia</li>
-                    <li class="list-group-item">Aventura</li>
-                    <li class="list-group-item">Suspense</li>
-                </ol>
-            </div>
-        </div>
-    </div>
 
     <div class="container" style="margin-top: 20px; margin-bottom:10px; margin-top: 80px;">
         <h3 style="margin-bottom: 20px; font-weight:bold;">Na tabela abaixo é possível escolher qual informação pode ser
@@ -136,43 +116,44 @@ require_once '../Configuration/ConnectLi.php';
         </table>
     </div>
     <?php
- $result_usuarios = $controller->paginationC();
-        if (($result_usuarios) AND ($result_usuarios->rowCount() != 0)) {
-            while ($row_usuario = $result_usuarios->fetch(PDO::FETCH_ASSOC)) {
-                //var_dump($row_usuario);
-                extract($row_usuario);
+  $result_users = $controller->paginationC();
+  if (($result_users) AND ($result_users->rowCount() != 0)) {
+      while ($row_user = $result_users->fetch(PDO::FETCH_ASSOC)) {
+          extract($row_user);
                 ?>
-    <table class="table table-secondary table-hover" style="margin: 0 auto; margin-bottom:10px;">
-        <tr>
-            <td width="30%"><?php echo $row_usuario['id']; ?></td>
-            <td width="30%"><?php echo $row_usuario['name']; ?></td>
-            <td width="30%"><?php echo $row_usuario['book_borrowed_id']; ?></td>
-            <td width="30%"><?php echo $row_usuario['session_id']; ?></td>
-        </tr>
-    </table>
+    <div class="container" style="margin-top: 20px; align-items: center; margin-bottom:10px;">
+        <table class="table table-secondary table-hover" style="margin: 0 auto; margin-bottom:10px;">
+            <tr>
+                <td width="30%"><?php echo $row_user['id']; ?></td>
+                <td width="30%"><?php echo $row_user['name']; ?></td>
+                <td width="30%"><?php echo $row_user['book_borrowed_id']; ?></td>
+                <td width="30%"><?php echo $row_user['session_id']; ?></td>
+            </tr>
+        </table>
+    </div>
     <?php
             }
-            $qnt_pagina = $controller->countC();
-            $maximo_link = $controller->getMaxLC();
+            $qnt_page = $controller->countC();
+            $max_link = $controller->getMaxLC();
+
             echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='delete?page=1'style='color:black;'>Primeira</a></li> </button>";
 
-            for ($pagina_anterior = $pagina - $maximo_link; $pagina_anterior <= $pagina - 1; $pagina_anterior++) {
-                if ($pagina_anterior >= 1) {
-                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='delete?page=$pagina_anterior'style='color:black;'>$pagina_anterior</a></li> </button>";
+            for ($previous_page = $page - $max_link; $previous_page <= $page - 1; $previous_page++) {
+                if ($previous_page >= 1) {
+                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='delete?page=$previous_page'style='color:black;'>$previous_page</a></li> </button>";
+                }
+            }
+            echo "<a style='color:black;'href=''>$page</a> ";
+
+            for ($next_page = $page + 1; $next_page<= $page + $max_link; $next_page++) {
+                if ($next_page <= $qnt_page) {
+                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='delete?page=$next_page'style='color:black;'>$next_page</a></li> </button>";
                 }
             }
 
-            echo "<a style='color:black;'href=''>$pagina</a> ";
-
-            for ($proxima_pagina = $pagina + 1; $proxima_pagina <= $pagina + $maximo_link; $proxima_pagina++) {
-                if ($proxima_pagina <= $qnt_pagina) {
-                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='delete?page=$proxima_pagina'style='color:black;'>$proxima_pagina</a></li> </button>";
-                }
-            }
-
-            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='delete?page=$qnt_pagina' style='color:black;'>Última</a> </li> </button>";
+            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='delete?page=$qnt_page' style='color:black;'>Última</a> </li> </button>";
         } else {
-            echo "<p style='color: #f00;'>Erro!</p>";
+            echo "<p style='color: #f00;'>Erro: Nenhum usuário encontrado!</p>";
         }
         ?>
     </div>

@@ -1,37 +1,39 @@
 <?php
 require_once '../Configuration/ConnectLog.php';
-include_once '../Controllers/CadastrarController.php';
+include_once '../Controllers/RegisterController.php';
 
 // namespace Configuration;
 // namespace Controllers;
 
 // use Connect;
 
-class CadastrarModel extends ConnectLog{
+class RegisterModel extends ConnectLog{
     private $table;
     private $name;
     private $phone;
     private $password;
     private $email;
-    private $entrar;
+    private $confirmPassword;
     
     function __construct()
     {
         parent::__construct();
         $this->table = 'users';
     }
-    function cadastrar($nomeR, $telefoneR, $emailR, $senhaR){
-        $nomeR = $this->getName();
-        $telefoneR = $this->getPhone();
+    function register($nameR, $phoneR, $emailR, $passwordR){
+        $nameR = $this->getName();
+        $phoneR = $this->getPhone();
         $emailR = $this->getEmail();
-        $senhaR = $this->getPassWord();
-        $sql = $this->conectaLog->query("SELECT id FROM $this->table WHERE email ='{$emailR}'");
+        $passwordR = $this->getPassWord();
+        $confirmPasswordR = $this->getConfirmPassword();
+  
+        $sql = $this->conectLog->query("SELECT id FROM $this->table WHERE email ='{$emailR}'");
         //  return $sqlResult;
         if($sql->rowCount()>0){
             return false;
         }
-        else{
-            $sqlInsert = $this->conectaLog->query("INSERT INTO $this->table (nome, telefone, email, senha) VALUES('{$nomeR}','{$telefoneR}','{$emailR}',md5('{$senhaR}'))");
+        elseif($passwordR == $confirmPasswordR){
+            $sqlInsert = $this->conectLog->query("INSERT INTO $this->table (nome, telefone, email, senha) VALUES('{$nameR}','{$phoneR}','{$emailR}',md5('{$passwordR}'))");
             $resultI = $sqlInsert;
             return $resultI;
             return true;
@@ -53,8 +55,8 @@ class CadastrarModel extends ConnectLog{
     function getEmail(){
         return $this->email;
     }
-    function getEntrar(){
-        return $this->entrar;
+    function getConfirmPassword(){
+        return $this->confirmPassword;
     }
     function setName($name){
         $this->name = $name;
@@ -68,8 +70,8 @@ class CadastrarModel extends ConnectLog{
     function setEmail($email){
         $this->email = $email;
     }
-    function setEntrar($entrar){
-        $this->entrar = $entrar;
+    function setConfirmPassword($confirmPassword){
+        $this->confirmPassword = $confirmPassword;
     }
 }
 ?>

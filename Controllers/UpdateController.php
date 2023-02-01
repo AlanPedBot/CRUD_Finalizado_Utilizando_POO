@@ -1,23 +1,17 @@
 <?php
-require_once '../Models/AtualizaModel.php';
+require_once '../Models/UpdateModel.php';
 
-// namespace Models;
-// namespace Controllers;
-
-// use Models;
-
-
-class AtualizaController extends AtualizaModel{
+class UpdateController extends UpdateModel{
     private $model;
     private $nameC;
     private $sessionC;
     private $idC;
-    public $maximo_link = 5;
+    public $max_link = 5;
 
 
     public function __construct()
     {
-        $this->model = new AtualizaModel();
+        $this->model = new UpdateModel();
     }
     // Funções executoras;
     function editC(){
@@ -25,8 +19,8 @@ class AtualizaController extends AtualizaModel{
         return $resultC;
     }
     function countC(){
-        $countQPagina = $this->model->count();
-        return $countQPagina;
+        $countQPage = $this->model->count();
+        return $countQPage;
     }
     function paginationC(){
         $resultP = $this->model->pagination();
@@ -55,10 +49,10 @@ class AtualizaController extends AtualizaModel{
         $this->model->setId($this->idC);
     }
     function getMaxLC(){
-        return $this->maximo_link;
+        return $this->max_link;
     }
-    function setMaxLC($maximo_link){
-        $this->maximo_link = $maximo_link;
+    function setMaxLC($max_link){
+        $this->max_link = $max_link;
     }
 
 }

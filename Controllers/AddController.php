@@ -1,27 +1,21 @@
 <?php
-require_once '../Models/AdicionaModel.php';
+require_once '../Models/AddModel.php';
 
-// namespace Models;
-// namespace Controllers;
-
-// use Models;
-
-
-class AdicionaController extends AdicionaModel{
+class AddController extends AddModel{
     private $model;
     private $name;
     private $session;
-    public $maximo_link = 5;
+    public $max_link = 5;
 
 
     public function __construct()
     {
-        $this->model = new AdicionaModel();
+        $this->model = new AddModel();
     }
 
     // Funções executoras;
     function insertC(){
-        $result = $this->model->getInsert();
+        $result = $this->model->insert();
         return $result;
     }
     function paginationC(){
@@ -29,8 +23,8 @@ class AdicionaController extends AdicionaModel{
         return $resultP;
     }
     function countC(){
-        $countQPagina = $this->model->count();
-        return $countQPagina;
+        $countQPage = $this->model->count();
+        return $countQPage;
     }
      // Getters e Setters
     function getNameC(){
@@ -54,10 +48,10 @@ class AdicionaController extends AdicionaModel{
         
     }
     function getMaxLC(){
-        return $this->maximo_link;
+        return $this->max_link;
     }
-    function setMaxLC($maximo_link){
-        $this->maximo_link = $maximo_link;
+    function setMaxLC($max_link){
+        $this->max_link = $max_link;
     }
 }
 

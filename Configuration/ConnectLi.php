@@ -5,19 +5,19 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 class ConnectLi{
-    protected $conectaLib;
+    protected $conectLib;
 
     function __construct(){
             $this->conectaLibrary();
         }
     function conectaLibrary(){
         $local_serve = $_ENV['LOCAL_SERVE'];
-        $usuario_serve = $_ENV['USE_SERVE'];
-        $senha_serve = $_ENV['SENHA_SERVE'];
-        $banco_de_dados1 = $_ENV['BANCO_DADOS1'];
+        $user_serve = $_ENV['USE_SERVE'];
+        $password_serve = $_ENV['SENHA_SERVE'];
+        $database1 = $_ENV['BANCO_DADOS1'];
     
         try{
-            $this->conectaLib = new PDO("mysql:host=$local_serve;dbname=$banco_de_dados1", $usuario_serve, $senha_serve);
+            $this->conectLib = new PDO("mysql:host=$local_serve;dbname=$database1", $user_serve, $password_serve);
            
         }catch(PDOException $ex){
             return $ex->getMessage();

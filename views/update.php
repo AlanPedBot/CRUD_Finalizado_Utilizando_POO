@@ -8,8 +8,8 @@ if(!isset($_SESSION['id']))
     header("Location: ../views/login");
 }
 include_once('../views/header.php');
-require_once('../Controllers/AtualizaController.php');
-require_once '../Models/AtualizaModel.php';
+require_once('../Controllers/UpdateController.php');
+require_once '../Models/UpdateModel.php';
 require_once '../Configuration/ConnectLi.php';
 ?>
 <!DOCTYPE html>
@@ -28,31 +28,31 @@ require_once '../Configuration/ConnectLi.php';
 
 <body>
     <?php
-    if(isset($_SESSION['msgat'])){
-        echo $_SESSION['msgat'];
-        unset($_SESSION['msgat']);
+    if(isset($_SESSION['msgup'])){
+        echo $_SESSION['msgup'];
+        unset($_SESSION['msgup']);
     }
   // Tras os dados dos inputs do formulário
   $i = $_POST['id'];
   $n = $_POST['name'];
   $s = $_POST['id_se'];
 
-  $controller = new AtualizaController();
+  $controller = new UpdateController();
   $controller->setNameC($n);
   $controller->setSessionC($s);
   $controller->setIdC($i);
   $count = $controller->countC();
   $resp = $controller->editC();
-  if(isset($_POST["atualiza"])){
+  if(isset($_POST["update"])){
      if($s<=10){
-       if(($resp->rowCount()==1)&&($s<=10)){
-    $_SESSION['msgat'] =   "<p style =' width: 350px;
+       if($resp->rowCount()==1){
+    $_SESSION['msgup'] =   "<p style =' width: 350px;
     font-size: 20px;
     margin: 10px auto;
     padding: 10px;
     background-color: rgb(50, 205, 50, 0.3);
     border: 1px solid rgb(34, 139, 34);'>Livro atualizado com sucesso!!!</p>";
-    header('location: ./atualiza');
+    header('location: ./update');
 }else{
     echo "<p style ='width: 350px;
     font-size: 20px;
@@ -86,8 +86,7 @@ require_once '../Configuration/ConnectLi.php';
 
             <input class="w-25 p-3" type="number" name="id_se" placeholder="Digite o id da sessão" required>
         </div>
-        <button type="submit" name="atualiza" class="btn btn-success btn-lg"
-            style="margin-top: 15px;">ATUALIZAR</button>
+        <button type="submit" name="update" class="btn btn-success btn-lg" style="margin-top: 15px;">ATUALIZAR</button>
 
     </form>
     <div>
@@ -129,39 +128,39 @@ require_once '../Configuration/ConnectLi.php';
             while ($row_usuario = $result_usuarios->fetch(PDO::FETCH_ASSOC)) {
                 extract($row_usuario);
                 ?>
-    <table class="table table-secondary table-hover" style=" margin: 0 auto; margin-bottom:10px;">
-        <tr>
-            <td width="30%"><?php echo $row_usuario['id']; ?></td>
-            <td width="30%"><?php echo $row_usuario['name']; ?></td>
-            <td width="30%"><?php echo $row_usuario['book_borrowed_id']; ?></td>
-            <td width="30%"><?php echo $row_usuario['session_id']; ?></td>
-        </tr>
-    </table>
+    <div class="container" style="margin-top: 20px; align-items: center; margin-bottom:10px;">
+        <table class="table table-secondary table-hover" style=" margin: 0 auto; margin-bottom:10px;">
+            <tr>
+                <td width="30%"><?php echo $row_usuario['id']; ?></td>
+                <td width="30%"><?php echo $row_usuario['name']; ?></td>
+                <td width="30%"><?php echo $row_usuario['book_borrowed_id']; ?></td>
+                <td width="30%"><?php echo $row_usuario['session_id']; ?></td>
+            </tr>
+        </table>
+    </div>
     <?php
             }
+            $qnt_page = $controller->countC();
+            $max_link = $controller->getMaxLC();
 
-            $qnt_pagina = $controller->countC();
-            $maximo_link = $controller->getMaxLC();
+            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='update?page=1'style='color:black;'>Primeira</a></li> </button>";
 
-            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='atualiza?page=1'style='color:black;'>Primeira</a></li> </button>";
+            for ($previous_page = $page - $max_link; $previous_page <= $page - 1; $previous_page++) {
+                if ($previous_page >= 1) {
+                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='update?page=$previous_page'style='color:black;'>$previous_page</a></li> </button>";
+                }
+            }
+            echo "<a style='color:black;'href=''>$page</a> ";
 
-            for ($pagina_anterior = $pagina - $maximo_link; $pagina_anterior <= $pagina - 1; $pagina_anterior++) {
-                if ($pagina_anterior >= 1) {
-                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='atualiza?page=$pagina_anterior'style='color:black;'>$pagina_anterior</a></li> </button>";
+            for ($next_page = $page + 1; $next_page<= $page + $max_link; $next_page++) {
+                if ($next_page <= $qnt_page) {
+                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='update?page=$next_page'style='color:black;'>$next_page</a></li> </button>";
                 }
             }
 
-            echo "<a style='color:black;'href=''>$pagina</a> ";
-
-            for ($proxima_pagina = $pagina + 1; $proxima_pagina <= $pagina + $maximo_link; $proxima_pagina++) {
-                if ($proxima_pagina <= $qnt_pagina) {
-                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='atualiza?page=$proxima_pagina'style='color:black;'>$proxima_pagina</a></li> </button>";
-                }
-            }
-
-            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='atualiza?page=$qnt_pagina' style='color:black;'>Última</a> </li> </button>";
+            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='update?page=$qnt_page' style='color:black;'>Última</a> </li> </button>";
         } else {
-            echo "<p style='color: #f00;'>Erro!</p>";
+            echo "<p style='color: #f00;'>Erro: Nenhum usuário encontrado!</p>";
         }
         ?>
 </body>

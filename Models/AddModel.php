@@ -1,34 +1,29 @@
 <?php
 require_once '../Configuration/ConnectLi.php';
-include_once '../Controllers/DeleteController.php';
+include_once '../Controllers/AddController.php';
 
-// namespace Configuration;
-// namespace Controllers;
-
-// use Connect;
-
-class DeleteModel extends ConnectLi{
+class AddModel extends ConnectLi{
     private $table;
-    private $id;
+    private $name_l;
+    private $id_session;
     public $limited_result = 10;
    
+    
     function __construct()
     {
         parent::__construct();
         $this->table = 'books';
     }
-    function delete(){
-        $i = $this->getId();
-        $sqlDelete = $this->conectLib->query("DELETE FROM $this->table WHERE id = '{$i}'");
-        $resultDelete = $sqlDelete;
-        return $resultDelete;
+    function insert(){
+
+        $name_l = $this->getName();
+        $id_session = $this->getSession();
+        $sqlInsert = $this->conectLib->query("INSERT INTO $this->table (name, session_id) VALUES ('{$name_l}', '{$id_session}')");
+        $result = $sqlInsert;
+        return $result;
     }
-    function consult(){
-        $i = $this->getId();
-        $sqlConsul = $this->conectLib->query("SELECT * FROM $this->table WHERE id = '{$i}'");
-        $resultC = $sqlConsul->fetchAll();
-        return $resultC;
-    }
+    
+    // Função da paginação
     function pagination(){
         $current_page = filter_input(INPUT_GET, "page", FILTER_SANITIZE_NUMBER_INT);
         $page = (!empty($current_page)) ? $current_page : 1;
@@ -55,12 +50,21 @@ class DeleteModel extends ConnectLi{
             return $qnt_page;
             // Maximo de itens por pagina
     }
+
     // Getters e Setters 
-    function getId(){
-        return $this->id;
+    function getName(){
+        return $this->name_l;
     }
-    function setId($id){
-        $this->id = $id;
+    function setName($name_l){
+       $this->name_l = $name_l;
     }
+    function getSession(){
+        return $this->id_session;
+    }
+    function setSession($id_session){
+        $this->id_session = $id_session;
+    }   
+    
 }
+
 ?>

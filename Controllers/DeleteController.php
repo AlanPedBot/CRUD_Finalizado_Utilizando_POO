@@ -1,15 +1,10 @@
 <?php
 require_once '../Models/DeleteModel.php';
 
-// namespace Models;
-// namespace Controllers;
-
-// use Models;
-
 class DeleteController extends DeleteModel{
     private $model;
     private $id;
-    public $maximo_link = 5;
+    public $max_link = 5;
 
 
     public function __construct()
@@ -26,8 +21,8 @@ class DeleteController extends DeleteModel{
         return $resultC;
     }
     function countC(){
-        $countQPagina = $this->model->count();
-        return $countQPagina;
+        $countQPage = $this->model->count();
+        return $countQPage;
     }
     function paginationC(){
         $resultP = $this->model->pagination();
@@ -42,10 +37,10 @@ class DeleteController extends DeleteModel{
         $this->model->setId($this->id);
     }
     function getMaxLC(){
-        return $this->maximo_link;
+        return $this->max_link;
     }
-    function setMaxLC($maximo_link){
-        $this->maximo_link = $maximo_link;
+    function setMaxLC($max_link){
+        $this->max_link = $max_link;
     }
 }
 ?>

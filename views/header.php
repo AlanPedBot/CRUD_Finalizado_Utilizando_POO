@@ -41,13 +41,13 @@ ob_start();
                         <a href="/views/home" style="margin-left: 30px;" class="nav-link">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/views/adiciona" style="margin-left: 30px;" class="nav-link">ADICIONAR</a>
+                        <a href="/views/add" style="margin-left: 30px;" class="nav-link">ADICIONAR</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/views/consulta" style="margin-left: 30px;" class="nav-link">BUSCAR</a>
+                        <a href="/views/read" style="margin-left: 30px;" class="nav-link">BUSCAR</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/views/atualiza" style="margin-left: 30px;" class="nav-link">ATUALIZAR</a>
+                        <a href="/views/update" style="margin-left: 30px;" class="nav-link">ATUALIZAR</a>
                     </li>
                     <li class="nav-item">
                         <a href="/views/delete" style="margin-left: 30px;" class="nav-link">DELETAR</a>

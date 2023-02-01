@@ -10,8 +10,8 @@ if(!isset($_SESSION["id"]))
 }
 
 include_once('../views/header.php');
-require_once('../Controllers/AdicionaController.php');
-require_once '../Models/AdicionaModel.php';
+require_once('../Controllers/AddController.php');
+require_once '../Models/AddModel.php';
 require_once '../Configuration/ConnectLi.php';
 
 ?>
@@ -36,30 +36,29 @@ require_once '../Configuration/ConnectLi.php';
 <body>
     <?php
 
-     if(isset($_SESSION['msgc'])){
-        echo $_SESSION['msgc'];
-        unset($_SESSION['msgc']);
+     if(isset($_SESSION['msgadd'])){
+        echo $_SESSION['msgadd'];
+        unset($_SESSION['msgadd']);
     }
            
        // pega o valor enviado pelos inputs
-           $name = $_POST["nome"];
+           $name = $_POST["name"];
            $id_s = $_POST["id_s"];
 
-           $controller = new AdicionaController();
+           $controller = new AddController();
            $controller->setNamec($name);
            $controller->setSessionC($id_s);
            $resultI = $controller->insertC();
-           print_r($bot);
 
-    if(isset($_POST["adiciona"])){
+    if(isset($_POST["add"])){
        if($resultI){
-        $_SESSION['msgc'] =  "<p style =' width: 350px;
+        $_SESSION['msgadd'] =  "<p style =' width: 350px;
            font-size: 20px;
            margin: 10px auto;
            padding: 10px;
            background-color: rgb(50, 205, 50, 0.3);
            border: 1px solid rgb(34, 139, 34);'>Livro adicionado com sucesso!!!!</p>";
-           header('location: ./adiciona');
+           header('location: ./add');
            
        }else{
         echo "<p style ='width: 350px;
@@ -67,25 +66,24 @@ require_once '../Configuration/ConnectLi.php';
            margin: 10px auto;
            padding: 10px;
            background-color: rgb(250, 128, 114, 0.3);
-           border: 1px solid rgb(165, 42, 42); text-size:5pt'>Erro, Id inválido!</p>";
+           border: 1px solid rgb(165, 42, 42); text-size:5pt'>Erro, Id inválido. Escolha uma das opções ilustradas abaixo!</p>";
          
        }
     }
     ?>
     <!-- formulario que pega as informações pelos inputs  -->
-    <form method="POST" action="">
+    <form method="post" action="">
         <div class="mx-auto" style="margin-top: 10px;">
             <h1>Inserindo Livro</h1>
             <p class="fs-2 bg-dark">NOME </p>
-            <input class="w-25 p-3" type="text" name="nome" placeholder="Digite o nome do livro" required>
+            <input class="w-25 p-3" type="text" name="name" placeholder="Digite o nome do livro" required>
 
 
             <p class="fs-2 bg-dark" style="margin-top: 15px;">ID_SESSÃO</p>
 
             <input class="w-25 p-3" type="number" name="id_s" placeholder="Digite a sessão do livro" required>
         </div>
-        <button type="submit" name="adiciona" class="btn btn-primary btn-lg"
-            style="margin-top: 15px;">ADICIONAR</button>
+        <button type="submit" name="add" class="btn btn-primary btn-lg" style="margin-top: 15px;">ADICIONAR</button>
     </form>
     <div>
         <div class="position-relative" style="margin-top: 20px;">
@@ -120,45 +118,44 @@ require_once '../Configuration/ConnectLi.php';
         </table>
     </div>
     <?php
-        $result_usuarios = $controller->paginationC();
+        $result_users = $controller->paginationC();
         
 
-        if (($result_usuarios) AND ($result_usuarios->rowCount() != 0)) {
-            while ($row_usuario = $result_usuarios->fetch(PDO::FETCH_ASSOC)) {
-                extract($row_usuario);
+        if (($result_users) AND ($result_users->rowCount() != 0)) {
+            while ($row_user = $result_users->fetch(PDO::FETCH_ASSOC)) {
+                extract($row_user);
                 ?>
     <div class="container" style="margin-top: 20px; align-items: center; margin-bottom:10px;">
         <table class="table table-secondary table-hover" style="margin: 0 auto;">
             <tr>
-                <td width="30%"><?php echo $row_usuario['id']; ?></td>
-                <td width="30%"><?php echo $row_usuario['name']; ?></td>
-                <td width="30%"><?php echo $row_usuario['book_borrowed_id']; ?></td>
-                <td width="30%"><?php echo $row_usuario['session_id']; ?></td>
+                <td width="30%"><?php echo $row_user['id']; ?></td>
+                <td width="30%"><?php echo $row_user['name']; ?></td>
+                <td width="30%"><?php echo $row_user['book_borrowed_id']; ?></td>
+                <td width="30%"><?php echo $row_user['session_id']; ?></td>
             </tr>
         </table>
     </div>
     <?php   } ?>
     <?php
-            $qnt_pagina = $controller->countC();
-            $maximo_link = $controller->getMaxLC();
+            $qnt_page = $controller->countC();
+            $max_link = $controller->getMaxLC();
 
-            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='adiciona?page=1'style='color:black;'>Primeira</a></li> </button>";
+            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='add?page=1'style='color:black;'>Primeira</a></li> </button>";
 
-            for ($pagina_anterior = $pagina - $maximo_link; $pagina_anterior <= $pagina - 1; $pagina_anterior++) {
-                if ($pagina_anterior >= 1) {
-                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='adiciona?page=$pagina_anterior'style='color:black;'>$pagina_anterior</a></li> </button>";
+            for ($previous_page = $page - $max_link; $previous_page <= $page - 1; $previous_page++) {
+                if ($previous_page >= 1) {
+                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='add?page=$previous_page'style='color:black;'>$previous_page</a></li> </button>";
+                }
+            }
+            echo "<a style='color:black;'href=''>$page</a> ";
+
+            for ($next_page = $page + 1; $next_page<= $page + $max_link; $next_page++) {
+                if ($next_page <= $qnt_page) {
+                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='add?page=$next_page'style='color:black;'>$next_page</a></li> </button>";
                 }
             }
 
-            echo "<a style='color:black;'href=''>$pagina</a> ";
-
-            for ($proxima_pagina = $pagina + 1; $proxima_pagina <= $pagina + $maximo_link; $proxima_pagina++) {
-                if ($proxima_pagina <= $qnt_pagina) {
-                    echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='adiciona?page=$proxima_pagina'style='color:black;'>$proxima_pagina</a></li> </button>";
-                }
-            }
-
-            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='adiciona?page=$qnt_pagina' style='color:black;'>Última</a> </li> </button>";
+            echo "<button type='button' class='btn btn-light'style='margin-bottom: 15px; margin-right: 3px;color:black;'><a href='add?page=$qnt_page' style='color:black;'>Última</a> </li> </button>";
         } else {
             echo "<p style='color: #f00;'>Erro: Nenhum usuário encontrado!</p>";
         }

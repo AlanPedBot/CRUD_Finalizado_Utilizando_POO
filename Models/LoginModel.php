@@ -27,7 +27,7 @@ function logar($emailR, $senhaR){
     $entrarR = $this->getEntrar();
     $senhaR = md5($this->getPassWord());
   if (isset($entrarR)) {
-    $sql = $this->conectaLog->query("SELECT * FROM $this->table WHERE email = '{$emailR}'
+    $sql = $this->conectLog->query("SELECT * FROM $this->table WHERE email = '{$emailR}'
     AND senha = '{$senhaR}'") or die("erro ao selecionar");
     if (($sql) && ($sql->rowCount()<=0)){
         echo "<p style ='width: 350px;

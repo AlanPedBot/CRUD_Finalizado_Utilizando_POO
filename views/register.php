@@ -1,9 +1,6 @@
 <?php
-// // Inicia uma sessão
-session_start();
-
-require_once('../Controllers/CadastrarController.php');
-require_once '../Models/CadastrarModel.php';
+require_once('../Controllers/RegisterController.php');
+require_once '../Models/RegisterModel.php';
 require_once '../Configuration/ConnectLog.php';
 ?>
 
@@ -24,12 +21,12 @@ require_once '../Configuration/ConnectLog.php';
     <div style=" margin:80px auto 0px auto; width: 420px; text-align:center;">
         <h1>Cadastrar</h1>
         <form method="POST" action="">
-            <input type="text" name="nome" placeholder="Nome Completo" maxlength="30" required>
-            <input type="text" name="telefone" placeholder="Telefone" maxlength="30" required>
+            <input type="text" name="name" placeholder="Nome Completo" maxlength="30" required>
+            <input type="text" name="phone" placeholder="Telefone" maxlength="30" required>
             <input type="email" name="email" placeholder="Email" maxlength="40" required>
-            <input type="password" name="senha" placeholder="Senha" maxlength="15" required>
-            <input type="password" name="confSenha" placeholder="Confirme sua Senha" maxlength="15" required>
-            <input type="submit" value="CADASTRAR">
+            <input type="password" name="password" placeholder="Senha" maxlength="15" required>
+            <input type="password" name="confirmPassword" placeholder="Confirme sua Senha" maxlength="15" required>
+            <input type="submit" name="register" value="CADASTRAR">
             <div>
                 <div>
                     <a href="login">Fazer login!<strong> Logar!</strong></a>
@@ -38,25 +35,26 @@ require_once '../Configuration/ConnectLog.php';
         </form>
     </div>
     <?php
-        if(isset($_POST['nome'])){
+        if(isset($_POST['name'])){
 
-            $nome = addslashes($_POST['nome']);
-            $telefone = addslashes($_POST['telefone']);
+            $name = addslashes($_POST['name']);
+            $phone = addslashes($_POST['phone']);
             $email = addslashes($_POST['email']);
-            $senha = addslashes($_POST['senha']);
-            $confSenha = addslashes($_POST['confSenha']);
+            $password = addslashes($_POST['password']);
+            $confirmPassword = addslashes($_POST['confirmPassword']);
 
-            $controller = new CadastrarController();
-            $controller->setNameC($nome);
-            $controller->setPhoneC($telefone);
+            $controller = new registerController();
+            $controller->setNameC($name);
+            $controller->setPhoneC($phone);
             $controller->setEmailC($email);
-            $controller->setPassWordC($senha);
-            $controller->cadastrarC();
+            $controller->setPassWordC($password);
+            $controller->setConfirmPasswordC($confirmPassword);
+            $register = $controller->registerC();
 
         
-                if($senha == $confSenha){
+            if($password == $confirmPassword){
                     
-                if($cadastrar>0){
+                if($register>0){
                     echo "<p style =' width: 350px;
                     margin: 10px auto;
                     padding: 10px;

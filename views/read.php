@@ -13,8 +13,8 @@ if(!isset($_SESSION["id"]))
 // namespace Controllers;
 
 include_once('../views/header.php');
-require_once('../Controllers/ConsultaController.php');
-require_once '../Models/ConsultaModel.php';
+require_once('../Controllers/ReadController.php');
+require_once '../Models/ReadModel.php';
 require_once '../Configuration/ConnectLi.php';
 
 
@@ -37,39 +37,38 @@ require_once '../Configuration/ConnectLi.php';
 
 <body>
     <?php
-if(isset($_SESSION['msgco'])){
-    echo $_SESSION['msgco'];
-    unset($_SESSION['msgco']);
+if(isset($_SESSION['msgre'])){
+    echo $_SESSION['msgre'];
+    unset($_SESSION['msgre']);
 }
 
 
 $num = $_POST['id'];
-$controller = new ConsultaController();
+$controller = new ReadController();
 $controller->setNumc($num);
-$controller->getNumc();
 $result = $controller->getAllBusca();
 $count = count($result);
 
-if(isset($_POST["consulta"])){
-  if($count == 1){
-    $_SESSION['msgco'] =  "<p style =' width: 350px;
-    font-size: 20px;
-    margin: 10px auto;
-    padding: 10px;
-    background-color: rgb(50, 205, 50, 0.3);
-    border: 1px solid rgb(34, 139, 34);'>Busca realizada com sucesso!!!</p>";
-    header('location: ./consulta');
-    
-}else{
-    echo "<p style ='width: 350px;
+if(isset($_POST["read"])){
+  if($count == 0){
+    $_SESSION['msgre'] =  "<p style ='width: 350px;
     font-size: 20px;
     margin: 10px auto;
     padding: 10px;
     background-color: rgb(250, 128, 114, 0.3);
     border: 1px solid rgb(165, 42, 42); text-size:5pt'>Id Inválido!</p>";
-  
+    header('location: ./read');
+}else{
+    echo "<p style =' width: 350px;
+    font-size: 20px;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: rgb(50, 205, 50, 0.3);
+    border: 1px solid rgb(34, 139, 34);'>Busca realizada com sucesso!!!!</p>";
 }
+
 }
+
 ?>
     <!-- formulario que pega as informações pelos inputs -->
     <form method="post" action="">
@@ -79,7 +78,7 @@ if(isset($_POST["consulta"])){
 
             <input class="w-25 p-3" type="number" name="id" placeholder="Digite o id do livro" required>
         </div>
-        <button type="submit" name="consulta" class="btn btn-light btn-lg" style="margin-top: 15px;">BUSCAR</button>
+        <button type="submit" name="read" class="btn btn-light btn-lg" style="margin-top: 15px;">BUSCAR</button>
     </form>
 
     <div class="container" style="margin-top: 20px;">
@@ -94,16 +93,18 @@ if(isset($_POST["consulta"])){
     </div>
     <?php   
         //   Faz a busca de todos os registros do banco de dados 
-             foreach ($result as $busca){              
+             foreach ($result as $read){              
 ?>
-    <table class="table table-secondary table-hover" style="margin: 0 auto;">
-        <tr>
-            <td width="30%"><?php echo $busca['id']; ?></td>
-            <td width="30%"><?php echo $busca['name']; ?></td>
-            <td width="30%"><?php echo $busca['book_borrowed_id']; ?></td>
-            <td width="30%"><?php echo $busca['session_id']; ?></td>
-        </tr>
-    </table>
+    <div class="container" style="margin-top: 20px; align-items: center; margin-bottom:10px;">
+        <table class="table table-secondary table-hover" style="margin: 0 auto;">
+            <tr>
+                <td width="30%"><?php echo $read['id']; ?></td>
+                <td width="30%"><?php echo $read['name']; ?></td>
+                <td width="30%"><?php echo $read['book_borrowed_id']; ?></td>
+                <td width="30%"><?php echo $read['session_id']; ?></td>
+            </tr>
+        </table>
+    </div>
     <?php
         }     
     ?>
